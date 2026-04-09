@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UserDash ⚡ Dark Edition</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #8b5cf6; /* Vibrant Violet */
+      --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --input-bg: #334155;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #0f172a 100%);
+      color: var(--text);
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-weight: 800;
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 40px;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
+    }
+
+    /* Glass Card Effect */
+    .user-form {
+      background: var(--card);
+      padding: 30px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+    }
+
+    /* Input Styling */
+    .form-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    input {
+      background: var(--input-bg);
+      border: 2px solid transparent;
+      padding: 14px 18px;
+      border-radius: 12px;
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: #1e293b;
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+    }
+
+    #age { grid-column: span 2; }
+
+    /* Buttons */
+    button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent-gradient);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      margin-top: 20px;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    /* User List */
+    #users-list {
+      display: grid;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .user-card {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s;
+    }
+
+    .user-card:hover {
+      transform: scale(1.02);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .user-info b {
+      font-size: 1.1rem;
+      display: block;
+    }
+
+    .user-info span {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .user-badge {
+      background: #334155;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      background: #10b981;
+      color: white;
+      border-radius: 10px;
+      display: none;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>UserDash ⚡</h1>
+  
+  <div class="user-form">
+    <h2>👤 Ajouter un utilisateur</h2>
+    <form id="add-user-form">
+      <div class="form-group">
+        <input type="text" id="prenom" placeholder="Prénom" required>
+        <input type="text" id="nom" placeholder="Nom" required>
+      </div>
+      <input type="number" id="age" placeholder="🎂 Âge">
+      <button type="submit" class="btn-primary">
+        <span>✨</span> Créer le compte
+      </button>
+    </form>
+  </div>
+  
+  <div class="header-action">
+    <h2>📋 Liste des membres</h2>
+    <button id="load-users" class="btn-secondary">
+      🔄 Rafraîchir la base
+    </button>
+  </div>
+
+  <div id="users-list">
+    </div>
+</div>
+
+<div id="toast">✅ Utilisateur ajouté avec succès !</div>
+
+<script>
+  const showToast = (msg) => {
+    const toast = document.getElementById('toast');
+    toast.innerText = msg;
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 3000);
+  };
+
+  // Charger les utilisateurs
+  document.getElementById('load-users').addEventListener('click', async () => {
+    try {
+      const response = await fetch('/api/users');
+      const users = await response.json();
+      
+      const usersList = document.getElementById('users-list');
+      usersList.innerHTML = '';
+      
+      users.forEach(user => {
+        const userDiv = document.createElement('div');
+        userDiv.className = 'user-card';
+        userDiv.innerHTML = `
+          <div class="user-info">
+            <b>${user.prenom} ${user.nom}</b>
+            <span>🎂 ${user.age} ans</span>
+          </div>
+          <div class="user-badge">ID: ${user.id}</div>
+        `;
+        usersList.appendChild(userDiv);
+      });
+    } catch (error) {
+      console.error('Erreur:', error);
+    }
+  });
+  
+  // Ajouter un utilisateur
+  document.getElementById('add-user-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const nom = document.getElementById('nom').value;
+    const prenom = document.getElementById('prenom').value;
+    const age = parseInt(document.getElementById('age').value) || 0;
+    
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nom, prenom, age })
+      });
+      
+      const newUser = await response.json();
+      showToast(`✨ Bienvenue, ${prenom} !`);
+      
+      document.getElementById('add-user-form').reset();
+      document.getElementById('load-users').click();
+    } catch (error) {
+      console.error('Erreur:', error);
+    }
+  });
+
+  // Auto-load on start
+  window.onload = () => document.getElementById('load-users').click();
+</script>
+
+</body>
+</html>

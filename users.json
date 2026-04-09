@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "nom": "EL Mezouari",
+    "prenom": "Mohamed",
+    "age": 32
+  },
+  {
+    "id": 2,
+    "nom": "Taji",
+    "prenom": "Sara",
+    "age": 28
+  },
+  {
+    "id": 3,
+    "nom": "Elhadi",
+    "prenom": "Oussama",
+    "age": 45
+  },
+  {
+    "nom": "Sabiq",
+    "prenom": "Nouhayla",
+    "age": 22,
+    "id": 4
+  }
+]
